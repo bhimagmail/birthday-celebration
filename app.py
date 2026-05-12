@@ -8,7 +8,7 @@ st.set_page_config(
 )
 
 # Your deployed Streamlit URL
-BASE_URL = "https://birthday-celebration.streamlit.app"
+BASE_URL = "https://birthday-celebrationapp.streamlit.app"
 
 # Read URL parameters
 query_params = st.query_params
