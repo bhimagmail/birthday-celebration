@@ -7,10 +7,13 @@ st.set_page_config(
     layout="centered"
 )
 
-# Read URL query parameters
+# Your deployed Streamlit URL
+BASE_URL = "https://birthday-celebration.streamlit.app"
+
+# Read URL parameters
 query_params = st.query_params
 
-# If shared link contains data
+# If someone opens shared link
 if "friend" in query_params and "sender" in query_params and "message" in query_params:
 
     friend_name = query_params["friend"]
@@ -19,27 +22,33 @@ if "friend" in query_params and "sender" in query_params and "message" in query_
 
     # Celebration effects
     st.balloons()
+    st.snow()
 
     st.markdown(
         """
-        <h1 style='text-align:center; color:#ff4b4b;'>
+        <h1 style='text-align:center; color:#ff4b4b; font-size:60px;'>
         🎆 HAPPY BIRTHDAY 🎆
         </h1>
         """,
         unsafe_allow_html=True
     )
 
-    st.header(f"🎂 Happy Birthday {friend_name}!")
-
-    st.success(message)
-
-    st.subheader(f"— From {sender_name}")
-
-    st.snow()
-
-    st.markdown("---")
-
-    st.info("Someone special sent you this birthday wish ❤️")
+    st.markdown(
+        f"""
+        <div style="
+            background-color:#fff5f5;
+            padding:30px;
+            border-radius:20px;
+            text-align:center;
+            box-shadow:0px 0px 20px rgba(0,0,0,0.1);
+        ">
+            <h1>🎂 Happy Birthday {friend_name}!</h1>
+            <h3>{message}</h3>
+            <h2>— From {sender_name}</h2>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
 else:
 
@@ -59,24 +68,34 @@ else:
         encoded_sender = urllib.parse.quote(sender_name)
         encoded_message = urllib.parse.quote(message)
 
-        share_link = (
+        full_link = (
+            f"{BASE_URL}"
             f"?friend={encoded_friend}"
             f"&sender={encoded_sender}"
             f"&message={encoded_message}"
         )
 
-        st.success("Birthday Link Generated!")
+        st.success("🎉 Your Birthday Link is Ready!")
 
-        st.subheader("Share This Link")
+        st.subheader("Copy & Share This Link")
 
-        st.code(share_link)
+        st.code(full_link)
 
-        st.warning(
-            "After deployment, copy your Streamlit app URL and add this generated part to the end."
+        st.markdown(
+            f"""
+            <a href="{full_link}" target="_blank">
+                <button style="
+                    background-color:#ff4b4b;
+                    color:white;
+                    padding:12px 20px;
+                    border:none;
+                    border-radius:10px;
+                    font-size:18px;
+                    cursor:pointer;
+                ">
+                    🎂 Preview Birthday Page
+                </button>
+            </a>
+            """,
+            unsafe_allow_html=True
         )
-
-        st.markdown("""
-Example:
-
-https://your-app-name.streamlit.app/?friend=John&sender=Alex&message=Happy+Birthday
-""")
