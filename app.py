@@ -1,4 +1,5 @@
 import streamlit as st
+import urllib.parse
 
 st.set_page_config(
     page_title="Birthday Celebration",
@@ -6,40 +7,76 @@ st.set_page_config(
     layout="centered"
 )
 
-st.balloons()
+# Read URL query parameters
+query_params = st.query_params
 
-st.title("🎉 Birthday Celebration App")
+# If shared link contains data
+if "friend" in query_params and "sender" in query_params and "message" in query_params:
 
-friend_name = st.text_input("Enter Birthday Person's Name")
-sender_name = st.text_input("Your Name")
+    friend_name = query_params["friend"]
+    sender_name = query_params["sender"]
+    message = query_params["message"]
 
-message = st.text_area(
-    "Write Your Birthday Wish",
-    "Wishing you happiness, success, and joy on your special day!"
-)
+    # Celebration effects
+    st.balloons()
 
-if st.button("Generate Birthday Wish"):
-
-    st.success("Birthday Wish Generated Successfully!")
-
-    st.markdown("---")
+    st.markdown(
+        """
+        <h1 style='text-align:center; color:#ff4b4b;'>
+        🎆 HAPPY BIRTHDAY 🎆
+        </h1>
+        """,
+        unsafe_allow_html=True
+    )
 
     st.header(f"🎂 Happy Birthday {friend_name}!")
 
-    st.write(message)
+    st.success(message)
 
     st.subheader(f"— From {sender_name}")
 
-    st.balloons()
+    st.snow()
 
-    share_text = f"""
-Happy Birthday {friend_name}!
+    st.markdown("---")
 
-{message}
+    st.info("Someone special sent you this birthday wish ❤️")
 
-— From {sender_name}
-"""
+else:
 
-    st.code(share_text)
+    st.title("🎉 Birthday Celebration Generator")
 
-    st.info("Copy this message and share the Streamlit app link with your friend.")
+    friend_name = st.text_input("Birthday Person's Name")
+    sender_name = st.text_input("Your Name")
+
+    message = st.text_area(
+        "Birthday Wish",
+        "Wishing you happiness, success, and endless joy on your special day!"
+    )
+
+    if st.button("Generate Shareable Birthday Link"):
+
+        encoded_friend = urllib.parse.quote(friend_name)
+        encoded_sender = urllib.parse.quote(sender_name)
+        encoded_message = urllib.parse.quote(message)
+
+        share_link = (
+            f"?friend={encoded_friend}"
+            f"&sender={encoded_sender}"
+            f"&message={encoded_message}"
+        )
+
+        st.success("Birthday Link Generated!")
+
+        st.subheader("Share This Link")
+
+        st.code(share_link)
+
+        st.warning(
+            "After deployment, copy your Streamlit app URL and add this generated part to the end."
+        )
+
+        st.markdown("""
+Example:
+
+https://your-app-name.streamlit.app/?friend=John&sender=Alex&message=Happy+Birthday
+""")
