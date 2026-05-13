@@ -7,185 +7,134 @@ st.set_page_config(
     layout="centered"
 )
 
-# Replace with your deployed Streamlit URL
+# Replace with your actual deployed Streamlit URL
 BASE_URL = "https://birthday-celebrationapp.streamlit.app"
 
-# Query params
+# Read query parameters
 params = st.query_params
 
 friend_name = params.get("friend")
 sender_name = params.get("sender")
 message = params.get("message")
 
-# Global Styling
+# -------------------------
+# MOBILE RESPONSIVE STYLES
+# -------------------------
+
 st.markdown("""
 <style>
 
-/* Main background */
-.stApp {
-    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
-    overflow-x: hidden;
+html, body, [class*="css"] {
+    font-family: 'Arial', sans-serif;
 }
 
-/* Remove top spacing */
-.block-container {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-    max-width: 900px;
+/* Main container */
+.main-container {
+    width: 100%;
+    max-width: 700px;
+    margin: auto;
+    padding: 10px;
 }
 
-/* Animated floating circles */
-.floating {
-    position: fixed;
-    border-radius: 50%;
-    opacity: 0.15;
-    animation: float 8s infinite ease-in-out;
-    z-index: -1;
-}
-
-.float1 {
-    width: 250px;
-    height: 250px;
-    background: white;
-    top: 10%;
-    left: -80px;
-}
-
-.float2 {
-    width: 180px;
-    height: 180px;
-    background: white;
-    bottom: 10%;
-    right: -50px;
-    animation-delay: 2s;
-}
-
-@keyframes float {
-    0% {transform: translateY(0px);}
-    50% {transform: translateY(-30px);}
-    100% {transform: translateY(0px);}
-}
-
-/* Glassmorphism card */
-.card {
-    background: rgba(255,255,255,0.20);
-    backdrop-filter: blur(14px);
-    border-radius: 30px;
-    padding: 40px 25px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+/* Birthday card */
+.birthday-card {
+    background: linear-gradient(135deg, #ff4b6e, #ff8e53);
+    padding: 30px 20px;
+    border-radius: 25px;
     text-align: center;
-    animation: fadeIn 1.2s ease-in-out;
+    box-shadow: 0px 8px 25px rgba(0,0,0,0.25);
+    margin-top: 30px;
 }
 
-/* Fade animation */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(25px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0px);
-    }
-}
-
-/* Titles */
-.big-title {
-    font-size: 4rem;
+/* Title */
+.birthday-title {
+    font-size: 52px;
     font-weight: 800;
     color: white;
-    margin-bottom: 10px;
-    line-height: 1.1;
+    line-height: 1.2;
 }
 
-.friend-name {
-    font-size: 3rem;
-    font-weight: 700;
-    color: #fff;
+/* Friend Name */
+.birthday-name {
+    font-size: 42px;
+    font-weight: bold;
+    color: white;
     margin-top: 15px;
-    word-wrap: break-word;
 }
 
 /* Message */
-.message {
-    font-size: 1.5rem;
+.birthday-message {
+    font-size: 24px;
     color: white;
     margin-top: 25px;
-    line-height: 1.7;
+    line-height: 1.6;
     word-wrap: break-word;
 }
 
 /* Sender */
-.sender {
+.birthday-from {
+    font-size: 22px;
+    color: #fff7f7;
     margin-top: 30px;
-    font-size: 1.3rem;
-    color: white;
     font-weight: 600;
 }
 
-/* Inputs */
-.stTextInput input,
-.stTextArea textarea {
-    border-radius: 15px !important;
-    padding: 12px !important;
-    border: none !important;
-}
-
-/* Button */
-.stButton button {
-    width: 100%;
-    border-radius: 15px;
-    padding: 14px;
-    background: linear-gradient(90deg,#ff4b4b,#ff6b81);
-    color: white;
-    border: none;
-    font-size: 18px;
-    font-weight: 700;
-    transition: 0.3s;
-}
-
-.stButton button:hover {
-    transform: scale(1.02);
-}
-
-/* Mobile responsiveness */
+/* Mobile Responsive */
 @media (max-width: 768px) {
 
-    .big-title {
-        font-size: 2.5rem;
-    }
-
-    .friend-name {
-        font-size: 2rem;
-    }
-
-    .message {
-        font-size: 1.1rem;
-    }
-
-    .sender {
-        font-size: 1rem;
-    }
-
-    .card {
+    .birthday-card {
         padding: 25px 18px;
+        border-radius: 20px;
     }
 
-    .block-container {
-        padding-left: 1rem;
-        padding-right: 1rem;
+    .birthday-title {
+        font-size: 34px;
     }
+
+    .birthday-name {
+        font-size: 30px;
+    }
+
+    .birthday-message {
+        font-size: 20px;
+    }
+
+    .birthday-from {
+        font-size: 18px;
+    }
+}
+
+/* Input styling */
+.stTextInput input,
+.stTextArea textarea {
+    border-radius: 12px !important;
+    font-size: 18px !important;
+}
+
+/* Button styling */
+.stButton > button {
+    width: 100%;
+    background-color: #ff4b6e;
+    color: white;
+    border-radius: 12px;
+    height: 3.2em;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+}
+
+/* Code block */
+pre {
+    border-radius: 12px !important;
 }
 
 </style>
-
-<div class="floating float1"></div>
-<div class="floating float2"></div>
-
 """, unsafe_allow_html=True)
 
-# Celebration Page
+# -------------------------
+# BIRTHDAY DISPLAY PAGE
+# -------------------------
+
 if friend_name and sender_name and message:
 
     st.balloons()
@@ -193,22 +142,26 @@ if friend_name and sender_name and message:
 
     st.markdown(
         f"""
-        <div class="card">
+        <div class="main-container">
 
-            <div class="big-title">
-                🎉 HAPPY BIRTHDAY 🎉
-            </div>
+            <div class="birthday-card">
 
-            <div class="friend-name">
-                🎂 {friend_name}
-            </div>
+                <div class="birthday-title">
+                    🎆 HAPPY BIRTHDAY 🎆
+                </div>
 
-            <div class="message">
-                {message}
-            </div>
+                <div class="birthday-name">
+                    🎂 {friend_name}
+                </div>
 
-            <div class="sender">
-                ❤️ From {sender_name}
+                <div class="birthday-message">
+                    "{message}"
+                </div>
+
+                <div class="birthday-from">
+                    ❤️ From {sender_name}
+                </div>
+
             </div>
 
         </div>
@@ -216,32 +169,29 @@ if friend_name and sender_name and message:
         unsafe_allow_html=True
     )
 
-# Generator Page
+# -------------------------
+# GENERATOR PAGE
+# -------------------------
+
 else:
 
-    st.markdown(
-        """
-        <div class="card">
-            <div class="big-title">
-                🎂 Birthday Celebration
-            </div>
+    st.title("🎉 Birthday Celebration Generator")
 
-            <div class="message">
-                Create beautiful shareable birthday wishes instantly ✨
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True
+    st.markdown(
+        "Create a personalized birthday celebration link and share it instantly."
     )
 
-    st.write("")
+    friend_name = st.text_input(
+        "🎂 Birthday Person's Name"
+    )
 
-    friend_name = st.text_input("🎈 Birthday Person's Name")
-    sender_name = st.text_input("❤️ Your Name")
+    sender_name = st.text_input(
+        "❤️ Your Name"
+    )
 
     message = st.text_area(
         "💌 Birthday Wish",
-        "Wishing you happiness, success, love, and endless joy on your special day!"
+        "Wishing you happiness, success, laughter, and endless joy on your special day!"
     )
 
     if st.button("🎉 Generate Birthday Link"):
@@ -257,7 +207,7 @@ else:
             f"&message={encoded_message}"
         )
 
-        st.success("🎊 Your Celebration Link is Ready!")
+        st.success("✅ Your Shareable Birthday Link is Ready!")
 
         st.code(full_link)
 
@@ -266,13 +216,13 @@ else:
             <a href="{full_link}" target="_blank">
                 <button style="
                     width:100%;
-                    padding:16px;
-                    border:none;
-                    border-radius:15px;
-                    background:linear-gradient(90deg,#ff4b4b,#ff6b81);
+                    background:#ff4b6e;
                     color:white;
+                    border:none;
+                    padding:14px;
+                    border-radius:12px;
                     font-size:18px;
-                    font-weight:700;
+                    font-weight:bold;
                     cursor:pointer;
                     margin-top:10px;
                 ">
